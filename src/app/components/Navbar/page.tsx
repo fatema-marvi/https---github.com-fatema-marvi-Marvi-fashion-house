@@ -1,4 +1,4 @@
-"use client";
+"use client"; 
 
 import { useState } from "react";
 import { ShoppingCart, Search, Info } from "lucide-react";
@@ -12,6 +12,7 @@ const Navbar = () => {
   const { cartCount } = useCart();
   const { setSearchQuery } = useSearch(); // Use search context
   const [searchInput, setSearchInput] = useState("");
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // For mobile menu toggle
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,14 +21,22 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white shadow-md p-4">
-      <div className="container pl-2 flex items-center justify-between">
+      <div className="container max-w-screen-xl mx-auto px-4 flex items-center justify-between flex-wrap">
         {/* Logo */}
         <Link href="/" className="text-5xl font-serif font-bold text-black hover:text-blue-800 transition-colors duration-300">          
           Marvi Fashion House
         </Link>
 
+        {/* Mobile menu toggle */}
+        <button 
+          className="lg:hidden text-2xl"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          &#9776;
+        </button>
+
         {/* Navigation Links */}
-        <div className="space-x-4">
+        <div className={`lg:flex space-x-4 ${isMenuOpen ? "block" : "hidden"} lg:block`}>
           <Link href="/men" className="text-blue-800 font-bold text-2xl hover:text-gray-900">
             Men
           </Link>
@@ -40,20 +49,20 @@ const Navbar = () => {
         </div>
 
         {/* Search Bar */}
-        <form onSubmit={handleSearch} className="relative">
+        <form onSubmit={handleSearch} className="relative w-auto sm:w-32 md:w-40 lg:w-48 xl:w-64">
           <input
             type="text"
             placeholder="Search..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="border rounded-full py-2 px-4 pr-10 w-64"
+            className="border rounded-full py-2 px-4 pr-10 w-full"
           />
           <button type="submit" className="absolute right-3 top-2 text-gray-500">
             <Search size={18} />
           </button>
         </form>
 
-        {/* Cart & Info */}
+        {/* Cart, Info, WhatsApp Icons */}
         <div className="flex items-center space-x-4">
           <Link href="/cart" className="relative">
             <ShoppingCart size={24} />
@@ -67,8 +76,8 @@ const Navbar = () => {
             <Info size={24} />
           </Link>
 
-           {/* WhatsApp */}
-           <Link
+          {/* WhatsApp */}
+          <Link
             href="https://wa.me/923322169105" // Replace with your WhatsApp number
             target="_blank"
             rel="noopener noreferrer"
